@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd">
+ 	
+ 	
+ 	<!-- <mvc:default-servlet-handler/> -->
+	<!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+	<!-- <context:annotation-config /> -->
+	<mvc:annotation-driven />
+ 	
+    <!-- Specifying base package of the Components like Controller, Service, DAO -->
+    <context:component-scan base-package="com.src.controller" />
+    <context:component-scan base-package="com.src.services" />
+    <context:component-scan base-package="com.src.dao" />
+ 	
+    <!-- Specifying the Resource location to load JS, CSS, Images etc -->
+    <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" />
+ 	<!-- <mvc:resources mapping="/pages/**" location="/pages/" /> -->
+	
+    <!-- View Resolver -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    
+    <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/*" />
+			<mvc:exclude-mapping path="/login"/>
+			<mvc:exclude-mapping path="/logout"/>
+			<bean class="com.src.util.RequestProcessingTimeInterceptor"></bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+    <!-- <context:property-placeholder location="classpath:application.properties" /> -->
+	<!-- 
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+        <property name="driverClassName" value="${database.driver}"></property>
+        <property name="url" value="${database.url}"></property>
+        <property name="username" value="${database.user}"></property>
+        <property name="password" value="${database.password}"></property>
+    </bean>
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+			p:packagesToScan="dt.web.model" p:dataSource-ref="dataSource">
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="true" />
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	 -->
+</beans>
+<!--  See more at: http://javawebtutor.com/articles/spring/spring-mvc-hibernate-crud-example.php#sthash.fNWv1Y32.dpuf -->
